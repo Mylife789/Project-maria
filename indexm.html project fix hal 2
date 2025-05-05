@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Halaman 2 - Nilai Lanjutan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+      height: 100vh;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: white;
+    }
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(2px);
+    }
+    #hasil {
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 15px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #data-siswa {
+      background-color: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="data-siswa">
+      <h3>Data Siswa</h3>
+      <p><strong>Nama:</strong> <span id="nama"></span></p>
+      <p><strong>Instansi:</strong> <span id="instansi"></span></p>
+      <p><strong>Kompetensi:</strong> <span id="kompetensi"></span></p>
+    </div>
+
+    <h2>Masukkan Nilai Akhir</h2>
+
+    <form id="form-nilai">
+      <label>Disiplin:
+        <select name="disiplin">
+          <option value="95">A (90-98)</option>
+          <option value="85">B (80-89)</option>
+          <option value="75">C (70-79)</option>
+          <option value="65">D (60-69)</option>
+        </select>
+      </label>
+
+      <label>Sikap:
+        <select name="sikap">
+          <option value="95">A (90-98)</option>
+          <option value="85">B (80-89)</option>
+          <option value="75">C (70-79)</option>
+          <option value="65">D (60-69)</option>
+        </select>
+      </label>
+
+      <label>Kerajinan:
+        <select name="kerajinan">
+          <option value="95">A (90-98)</option>
+          <option value="85">B (80-89)</option>
+          <option value="75">C (70-79)</option>
+          <option value="65">D (60-69)</option>
+        </select>
+      </label>
+
+      <label>Kerapihan:
+        <select name="kerapihan">
+          <option value="95">A (90-98)</option>
+          <option value="85">B (80-89)</option>
+          <option value="75">C (70-79)</option>
+          <option value="65">D (60-69)</option>
+        </select>
+      </label>
+
+      <label>Kerjasama:
+        <select name="kerjasama">
+          <option value="95">A (90-98)</option>
+          <option value="85">B (80-89)</option>
+          <option value="75">C (70-79)</option>
+          <option value="65">D (60-69)</option>
+        </select>
+      </label>
+
+      <label>Tanggung Jawab:
+        <select name="tanggungjawab">
+          <option value="95">A (90-98)</option>
+          <option value="85">B (80-89)</option>
+          <option value="75">C (70-79)</option>
+          <option value="65">D (60-69)</option>
+        </select>
+      </label>
+
+      <button type="button" onclick="hitungNilai()">Hitung Nilai</button>
+    </form>
+
+    <div id="hasil"></div>
+  </div>
+
+  <script>
+    // Ambil data siswa dari localStorage dan tampilkan
+    const dataSiswa = JSON.parse(localStorage.getItem("dataSiswa"));
+    if (dataSiswa) {
+      document.getElementById("nama").textContent = dataSiswa.nama;
+      document.getElementById("instansi").textContent = dataSiswa.instansi;
+      document.getElementById("kompetensi").textContent = dataSiswa.kompetensi;
+    } else {
+      alert("Data siswa tidak ditemukan. Silakan kembali ke halaman pertama.");
+      window.location.href = "index.html";
+    }
+
+    function hitungNilai() {
+      const form = document.forms['form-nilai'];
+      const kategori = ['disiplin', 'sikap', 'kerajinan', 'kerapihan', 'kerjasama', 'tanggungjawab'];
+      let total = 0;
+
+      kategori.forEach(k => {
+        total += parseInt(form[k].value);
+      });
+
+      const rata2 = total / kategori.length;
+
+      let grade = '';
+      if (rata2 >= 90) grade = 'A';
+      else if (rata2 >= 80) grade = 'B';
+      else if (rata2 >= 70) grade = 'C';
+      else grade = 'D';
+
+      // Simpan hasil ke localStorage
+      const hasilAkhir = {
+        total: total,
+        rata: rata2.toFixed(2),
+        grade: grade
+      };
+      localStorage.setItem("hasilNilai", JSON.stringify(hasilAkhir));
+
+      // Tampilkan hasil
+      document.getElementById('hasil').innerHTML = `
+        <h3>Hasil:</h3>
+        <p><strong>Total Nilai:</strong> ${total}</p>
+        <p><strong>Rata-Rata:</strong> ${rata2.toFixed(2)}</p>
+        <p><strong>Grade:</strong> ${grade}</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
